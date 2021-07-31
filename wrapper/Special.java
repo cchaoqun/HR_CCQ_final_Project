@@ -33,7 +33,7 @@ public class Special extends Main {
                 allFullZip.add(entry.getKey());
             }
         }
-        String ratio = choice==0?"partio":"fully";
+        String ratio = choice==0?"partial":"fully";
         System.out.println("This is all the "+ratio+" vaccination ratio and corresponding average market value per home");
         getPropertyValue(allFullZip, ratio, choice);
         return ;

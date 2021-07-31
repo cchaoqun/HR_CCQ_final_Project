@@ -24,6 +24,11 @@ public class CovidJsonParser extends CovidProcessor implements CovidParser{
      */
     public CovidJsonParser(){
     }
+
+    /**
+     * constructor for passing the filename to be passed
+     * @param _filename
+     */
     public CovidJsonParser(String _filename) {
         this.filename = "covid_data.json";
     }
@@ -84,17 +89,4 @@ public class CovidJsonParser extends CovidProcessor implements CovidParser{
         vacciPerCap.get(zip).updateParFull(parInt, fullInt);
     }
 
-    /**
-     * try to cast the str to integer, if failed return 0
-     * @param str
-     * @return
-     */
-    public int castInt(String str){
-        int res = 0;
-        try{
-            res = Integer.parseInt(str);
-        }catch (Exception e){
-        }
-        return res;
-    }
 }

@@ -1,5 +1,6 @@
 package com.CIT594.project594.covid;
 
+import com.CIT594.project594.util.ParserUtils;
 import com.CIT594.project594.wrapper.Covid;
 import com.CIT594.project594.Main;
 import com.CIT594.project594.wrapper.Vaccination;
@@ -24,6 +25,10 @@ public class CovidProcessor extends Main {
 
     public CovidProcessor(){}
 
+    /**
+     * constructor for initialize map, create parser for corresponding file format, parsing file
+     * @param filename
+     */
     public CovidProcessor(String filename){
         // create treemap for saving zip-Vaccination pair
         vacciPerCap = new TreeMap<>();
@@ -31,6 +36,8 @@ public class CovidProcessor extends Main {
         createParser(filename);
         // parse file
         parseFile();
+        //log
+        log.log(filename);
     }
 
     /**

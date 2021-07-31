@@ -7,6 +7,9 @@ import java.text.DecimalFormat;
  * @date 2021-07-2021/7/30-23:55
  */
 
+/**
+ * Wrapper class for integrating population and partial && full vaccination
+ */
 public class Covid {
     /**
      * 10^n represent how n digits we want to keep after .

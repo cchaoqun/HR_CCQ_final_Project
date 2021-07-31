@@ -34,6 +34,8 @@ public class PropertyParser extends Main {
         filename = _filename;
         propertyInfo = new TreeMap<>();
         parseFile();
+        //log
+        log.log(filename);
     }
 
     /**

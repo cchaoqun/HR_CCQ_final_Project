@@ -2,10 +2,10 @@ package com.CIT594.project594.test;
 
 import com.CIT594.project594.Main;
 import com.CIT594.project594.covid.CovidJsonParser;
+import com.CIT594.project594.log.Logger;
 import com.CIT594.project594.population.PopulationParser;
 import com.CIT594.project594.property.PropertyParser;
 import com.CIT594.project594.util.ParserUtils;
-import com.CIT594.project594.wrapper.Property;
 import org.junit.jupiter.api.Test;
 
 import java.text.DecimalFormat;
@@ -20,18 +20,13 @@ import java.util.regex.Pattern;
 
 public class CIT594ProjectTest {
     Main main = new Main();
-    String covid = "covid_data.json";
-    String property = "properties.csv";
-    String population = "population.txt";
-    String log = "trivial_log.log";
-    String[] args1 = {covid, property, population, log};
+    static String covid = "covid_data.json";
+    static String property = "properties.csv";
+    static String population = "population.txt";
+    static String log = "finalProjectLog.txt";
+    static String[] args1 = {covid, property, population, log};
 
     public static void main(String[] args) {
-        String covid = "covid_data.csv";
-        String property = "properties.csv";
-        String population = "population.txt";
-        String log = "trivial_log.log";
-        String[] args1 = {covid, property, population, log};
         Main.main(args1);
     }
 
@@ -175,6 +170,13 @@ public class CIT594ProjectTest {
     public void test(){
         String str = "0.000";
         System.out.println(str.compareTo("0"));
+    }
+
+    @Test
+    public void testLog(){
+        String file = "projectLog.txt";
+        Logger log = Logger.getInstance(file);
+        log.log(1231+"\n");
     }
 
 }

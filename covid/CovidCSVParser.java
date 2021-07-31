@@ -1,5 +1,6 @@
 package com.CIT594.project594.covid;
 
+import com.CIT594.project594.util.ParserUtils;
 import com.CIT594.project594.wrapper.Vaccination;
 
 import java.io.BufferedReader;
@@ -70,7 +71,7 @@ public class CovidCSVParser extends CovidProcessor implements CovidParser{
      */
     public void parseParFull(String line){
         // parse out the index of all the comma
-        List<Integer> commaPos = getCommaPos(line);
+        List<Integer> commaPos = ParserUtils.getCommaPos(line);
         int size = commaPos.size();
         //zip is between the first and second comma
         String zip = line.substring(commaPos.get(1)+1, commaPos.get(2));
@@ -79,33 +80,11 @@ public class CovidCSVParser extends CovidProcessor implements CovidParser{
         //full is between last comma and end of string
         String partial = line.substring(commaPos.get(size-3)+1, commaPos.get(size-2));
         // try to convert to Long
-        Long lZip = tryCastStrToLong(zip);
-        Long lPartial = tryCastStrToLong(partial);
-        Long lFull = tryCastStrToLong(full);
+        Long lZip = ParserUtils.tryCastStrToLong(zip);
+        Long lPartial = ParserUtils.tryCastStrToLong(partial);
+        Long lFull = ParserUtils.tryCastStrToLong(full);
         // save in the vacciPerCap map in the father class
         updateParFull(lZip, lPartial, lFull);
-    }
-
-    /**
-     * parse out all the comma's index in the string line return as a list of indexes
-     * @param line
-     * @return
-     */
-    public List<Integer> getCommaPos(String line){
-        line = line.trim();
-        String reg = "[,]";
-        Pattern p = Pattern.compile(reg);
-        Matcher m = p.matcher(line);
-        List<Integer> commaPos = new ArrayList<>();
-        // 0 represent the start of line
-        commaPos.add(0);
-        while(m.find()){
-            //add the comma's index into list
-            commaPos.add(m.start());
-        }
-        commaPos.add(line.length());
-        // end of the line
-        return commaPos;
     }
 
     /**
@@ -124,24 +103,6 @@ public class CovidCSVParser extends CovidProcessor implements CovidParser{
         Long fullInt = full==null?0l:full;
         // update two number to the vaccination object associate with zip code
         vacciPerCap.get(zip).updateParFull(parInt, fullInt);
-    }
-
-
-
-    /**
-     * try to cast this str to Long, return 0l if failed
-     * @param str
-     * @return
-     */
-    private Long tryCastStrToLong(String str){
-        Long res = 0l;
-        try{
-            //ignore cases that can not be converted to Long
-            res = Long.parseLong(str);
-        }catch (Exception e){
-            // do nothing just let res = 0
-        }
-        return res;
     }
 
 

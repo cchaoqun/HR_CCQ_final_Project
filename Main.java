@@ -2,6 +2,7 @@ package com.CIT594.project594;
 
 
 import com.CIT594.project594.covid.CovidProcessor;
+import com.CIT594.project594.log.Logger;
 import com.CIT594.project594.population.PopulationParser;
 import com.CIT594.project594.property.PropertyParser;
 import com.CIT594.project594.util.ParserUtils;
@@ -9,7 +10,6 @@ import com.CIT594.project594.wrapper.Covid;
 import com.CIT594.project594.wrapper.Special;
 
 import java.io.File;
-import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,26 +20,45 @@ import java.util.regex.Pattern;
  */
 
 public class Main {
-    public static  String COVID_DATA ;
-    public static  String PROPERTY_VALUES;
-    public static  String POPULATION;
-    public static  String LOG;
+    /**
+     * 4 filename passed from the argas
+     */
+    public static String COVID_DATA ;
+    public static String PROPERTY_VALUES;
+    public static String POPULATION;
+    public static String LOG;
+    /**
+     * regular expression for checking file format
+     */
     public static final String jsonReg = ".json$";
     public static final String txtReg = ".txt$";
     public static final String csvReg = ".csv$";
+    /**
+     * based on passed in file format decide which covid file format is
+     */
     public static boolean isJson;
     public static boolean isCSV;
+    /**
+     * some header for covid and property file, extracted out for convenience
+     */
     public static final String PARTIAL = "partially_vaccinated";
     public static final String FULL = "fully_vaccinated";
     public static final String TIME = "etl_timestamp";
     public static final String ZIP = "zip_code";
-    public static final String  MARKET_VALUE = "market_value";
+    public static final String MARKET_VALUE = "market_value";
     public static final String TOTAL_LIVEABEL_AREA = "total_livable_area";
 
+    /**
+     * parser instance for different file
+     */
     public static CovidProcessor covidProcessor;
     public static PopulationParser populationParser;
     public static PropertyParser propertyParser;
     public static Special special;
+    public static Logger log;
+    /**
+     * integrated data including both population and partial and full vaccination
+     */
     public static TreeMap<Long, Covid> covidData = new TreeMap<>();
 
     public static void main(String[] args) {
@@ -54,12 +73,18 @@ public class Main {
             switch (userInput){
                 case 0:
                     System.out.println("exit");
+                    //log
+                    log.log(0);
                     break;
                 case 1:
                     // get total population
                     System.out.println(populationParser.getTotalPopulation());
+                    //log
+                    log.log(1);
                     break;
                 case 2:
+                    //log
+                    log.log(2);
                     // update pop partial and full into covidData
                     calTotalVacciPerCap();
                     // get user choice
@@ -70,18 +95,24 @@ public class Main {
                 case 3:
                     // get zip
                     String zipChooseMarket = ParserUtils.getUserZip();
+                    //log
+                    log.log(zipChooseMarket);
                     // show avg market
                     propertyParser.showOneZipMarket(zipChooseMarket);
                     break;
                 case 4:
                     // get zip
                     String zipChooseArea = ParserUtils.getUserZip();
+                    //log
+                    log.log(zipChooseArea);
                     // show avg area
                     propertyParser.showOneZipArea(zipChooseArea);
                     break;
                 case 5:
                     // get user input zip
                     String zipChooseMarketPerCap = ParserUtils.getUserZip();
+                    //log
+                    log.log(zipChooseMarketPerCap);
                     // get corresponding population of this zip
                     Long pop = populationParser.getPopPerZip(zipChooseMarketPerCap);
                     // get the average market value per people
@@ -107,6 +138,9 @@ public class Main {
      *  let the
      */
     public static void initParser(){
+        log = Logger.getInstance(LOG);
+        //log
+        log.log(COVID_DATA+" "+PROPERTY_VALUES+" "+POPULATION+" "+LOG);
         // create parser for population file
         populationParser = PopulationParser.getPopulationParser();
         // parse total population
@@ -116,8 +150,6 @@ public class Main {
         // create property parser for property.csv
         propertyParser = new PropertyParser(PROPERTY_VALUES);
         special = new Special();
-
-
     }
 
     /**
@@ -180,7 +212,7 @@ public class Main {
         File covid = new File(COVID_DATA);
         File property = new File(PROPERTY_VALUES);
         File population = new File(POPULATION);
-        File log = new File(LOG);
+//        File log = new File(LOG);
         if(!covid.exists() || !covid.canRead()){
             throw new RuntimeException(COVID_DATA+" is not found or can not read");
         }
@@ -190,9 +222,9 @@ public class Main {
         if(!population.exists() || !population.canRead()){
             throw new RuntimeException(POPULATION+" is not found or can not read");
         }
-        if(!log.exists() || !log.canRead()){
-            throw new RuntimeException(LOG+" is not found or can not read");
-        }
+//        if(!log.exists() || !log.canRead()){
+//            throw new RuntimeException(LOG+" is not found or can not read");
+//        }
         return true;
     }
 

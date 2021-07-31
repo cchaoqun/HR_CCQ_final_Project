@@ -48,7 +48,6 @@ public class PopulationParser extends Main {
                     // create the instance
                     popParser = new PopulationParser();
                     PopPerZip = new TreeMap<>();
-
                 }
             }
         }
@@ -90,6 +89,8 @@ public class PopulationParser extends Main {
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(new File(filename)));
+            //log
+            log.log(filename);
             String data;
             // read line by line
             while((data = br.readLine()) != null){
@@ -153,7 +154,7 @@ public class PopulationParser extends Main {
      */
     private Long getPop(String line){
         String popStr = line.trim().split(" ")[1].trim();
-        return tryCastStrToLong(popStr);
+        return ParserUtils.tryCastStrToLong(popStr);
     }
 
     /**
@@ -163,24 +164,10 @@ public class PopulationParser extends Main {
      */
     private Long getZip(String line){
         String popStr = line.trim().split(" ")[0].trim();
-        return tryCastStrToLong(popStr);
+        return ParserUtils.tryCastStrToLong(popStr);
     }
 
-    /**
-     * try to cast this str to Long, return 0l if failed
-     * @param str
-     * @return
-     */
-    private Long tryCastStrToLong(String str){
-        Long res = 0l;
-        try{
-            //ignore cases that can not be converted to Long
-            res = Long.parseLong(str);
-        }catch (Exception e){
-            // do nothing just let res = 0
-        }
-        return res;
-    }
+
 
     /**
      * get population of this zip

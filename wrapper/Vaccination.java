@@ -62,25 +62,5 @@ public class Vaccination{
         return fully;
     }
 
-    //    public void addPartial(Long val){
-//        this.partial += val;
-//    }
-//
-//    /**
-//     * add this val to fully
-//     * @param val
-//     */
-//    public void addFull(Long val){
-//        this.fully += val;
-//    }
-//
-//    /**
-//     * add both par and full to partial and fully
-//     * @param par
-//     * @param fully
-//     */
-//    public void addParFull(Long par, Long fully){
-//        this.partial += par;
-//        this.fully += fully;
-//    }
+
 }

@@ -7,9 +7,21 @@ package com.CIT594.project594.wrapper;
  */
 
 public class Property {
+    /**
+     * zip code
+     */
     private Long zip;
+    /**
+     * total market value for this zip code
+     */
     private Double marketValue;
+    /**
+     * total liveable area for this zip
+     */
     private Double totalLiveableArea;
+    /**
+     * number of homes
+     */
     private int propertyNum;
     public Property(){
         zip = 0l;
@@ -39,6 +51,10 @@ public class Property {
         return i;
     }
 
+    /**
+     * calculate the average total liveable area for this zip
+     * @return
+     */
     public Integer calAvgTotalLiveArea(){
         if(propertyNum==0){
             return 0;

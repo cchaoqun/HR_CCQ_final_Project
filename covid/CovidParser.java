@@ -6,6 +6,10 @@ package com.CIT594.project594.covid;
  */
 
 public interface CovidParser {
-    // parse file either .json or csv
+
+    /**
+     parse file either .json or csv
+     *
+     */
     void parseFile();
 }

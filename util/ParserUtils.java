@@ -15,11 +15,17 @@ import java.util.regex.Pattern;
  * @date 2021-07-2021/7/31-17:43
  */
 
+/**
+ * Utils Class for parsing file
+ */
 public class ParserUtils {
     public static final String CHOOSE_PARTIAL = "partial";
     public static final String CHOOSE_FULL = "full";
     public static final String DIGIT_4 = "0.0000";
     public static final int NUM_DIGIT = 10000;
+    /**
+     *  file formater
+     */
     private static DecimalFormat df = new DecimalFormat(DIGIT_4);
 
 
@@ -206,6 +212,14 @@ public class ParserUtils {
         System.out.flush();
         userInput = input.next();
         return userInput;
+    }
+
+    /**
+     * get current time
+     * @return
+     */
+    public static String getCurrentTime(){
+        return System.currentTimeMillis()+"";
     }
 
 }
