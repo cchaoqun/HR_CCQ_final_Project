@@ -3,7 +3,10 @@ package com.CIT594.project594;
 
 import com.CIT594.project594.covid.CovidProcessor;
 import com.CIT594.project594.population.PopulationParser;
+import com.CIT594.project594.property.PropertyParser;
+import com.CIT594.project594.util.ParserUtils;
 import com.CIT594.project594.wrapper.Covid;
+import com.CIT594.project594.wrapper.Special;
 
 import java.io.File;
 import java.util.Scanner;
@@ -30,10 +33,13 @@ public class Main {
     public static final String FULL = "fully_vaccinated";
     public static final String TIME = "etl_timestamp";
     public static final String ZIP = "zip_code";
-    public static final String CHOOSE_PARTIAL = "partial";
-    public static final String CHOOSE_FULL = "full";
+    public static final String  MARKET_VALUE = "market_value";
+    public static final String TOTAL_LIVEABEL_AREA = "total_livable_area";
+
     public static CovidProcessor covidProcessor;
     public static PopulationParser populationParser;
+    public static PropertyParser propertyParser;
+    public static Special special;
     public static TreeMap<Long, Covid> covidData = new TreeMap<>();
 
     public static void main(String[] args) {
@@ -43,124 +49,57 @@ public class Main {
         initParser();
         int userInput = -1;
         while(userInput!=0){
-            userInput = Integer.parseInt(getUserPrompt());
+            userInput = Integer.parseInt(ParserUtils.getUserInput());
             System.out.println("BEGIN OUTPUT");
             switch (userInput){
                 case 0:
                     System.out.println("exit");
                     break;
                 case 1:
+                    // get total population
                     System.out.println(populationParser.getTotalPopulation());
                     break;
                 case 2:
-//                    System.out.println(COVID_DATA);
                     // update pop partial and full into covidData
                     calTotalVacciPerCap();
                     // get user choice
-                    int choice = getUserChoose();
+                    int choice = ParserUtils.getUserChoose();
                     // show partial or full according to choice
                     showVacciPerCap(choice);
                     break;
                 case 3:
-                    System.out.println("3");
+                    // get zip
+                    String zipChooseMarket = ParserUtils.getUserZip();
+                    // show avg market
+                    propertyParser.showOneZipMarket(zipChooseMarket);
                     break;
                 case 4:
-                    System.out.println("4");
+                    // get zip
+                    String zipChooseArea = ParserUtils.getUserZip();
+                    // show avg area
+                    propertyParser.showOneZipArea(zipChooseArea);
                     break;
                 case 5:
-                    System.out.println("5");
+                    // get user input zip
+                    String zipChooseMarketPerCap = ParserUtils.getUserZip();
+                    // get corresponding population of this zip
+                    Long pop = populationParser.getPopPerZip(zipChooseMarketPerCap);
+                    // get the average market value per people
+                    int marketPerCap = propertyParser.getZipMarketPerCap(zipChooseMarketPerCap, pop);
+                    System.out.println(marketPerCap);
                     break;
                 case 6:
-                    System.out.println("6");
+                    // one zip's average fully vaccinate ratio compared to average property value
+                    calTotalVacciPerCap();
+                    // get user choice
+                    int choiceSpecial = ParserUtils.getUserChoose();
+                    special.getNoneZeroVacc(choiceSpecial);
                     break;
             }
             System.out.println("END OUTPUT");
         }
 
     }
-    /**
-     * get user input for choice of 0-6
-     */
-    public static String getUserPrompt(){
-        Scanner input = new Scanner(System.in);
-        String invalid = "Invalid input integer, please enter an valid input (0-6)";
-        String get = "Please enter an valid integer from 0 to 6";
-        String userInput = "";
-        System.out.println(get);
-        System.out.print(">");
-        System.out.flush();
-        while(true){
-            userInput = input.next();
-            if(!validInput(userInput)){
-                System.out.println(invalid);
-                System.out.print(">");
-                System.out.flush();
-            }else{
-                break;
-            }
-        }
-        return userInput;
-    }
-
-    /**
-     * check whether the input is an integer that range from 0-6
-     * @param str
-     * @return
-     */
-    public static boolean validInput(String str){
-        if(str==null || str.length()!=1){
-            return false;
-        }
-        char cur = str.charAt(0);
-        return 0<= cur-'0' && cur-'0'<=6;
-    }
-
-    /**
-     * get user input for choice of partial || full
-     * return 0 for partial and 1 for full
-     */
-    public static int getUserChoose(){
-        Scanner input = new Scanner(System.in);
-        String invalid = "Invalid input please enter partial or full";
-        String get = "Please enter partial or full";
-        String userInput = "";
-        System.out.println(get);
-        System.out.print(">");
-        System.out.flush();
-        int choice = -1;
-        while(true){
-            userInput = input.next();
-            choice = validChoice(userInput);
-            if(choice==-1){
-                System.out.println(invalid);
-                System.out.print(">");
-                System.out.flush();
-            }else{
-                break;
-            }
-        }
-        return choice;
-    }
-
-    /**
-     * user prompt for choose to see partial or full vaccination
-     * @param str
-     * @return
-     */
-    public static int validChoice(String str){
-        if(str==null){
-            return -1;
-        }
-        if(str.equals(CHOOSE_PARTIAL)){
-            return 0;
-        }
-        if(str.equals(CHOOSE_FULL)){
-            return 1;
-        }
-        return -1;
-    }
-
-
 
     //===============Problem2===============
     /**
@@ -174,6 +113,11 @@ public class Main {
         populationParser.parsePop(POPULATION);
         // create parser for covid file
         covidProcessor = new CovidProcessor(COVID_DATA);
+        // create property parser for property.csv
+        propertyParser = new PropertyParser(PROPERTY_VALUES);
+        special = new Special();
+
+
     }
 
     /**
@@ -299,5 +243,9 @@ public class Main {
             throw new RuntimeException("Covid data file is not json or csv format:"+COVID_DATA);
         }
         return true;
+    }
+
+    public static TreeMap<Long, Covid> getCovidData() {
+        return covidData;
     }
 }

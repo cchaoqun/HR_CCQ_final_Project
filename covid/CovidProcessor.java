@@ -33,9 +33,6 @@ public class CovidProcessor extends Main {
         parseFile();
     }
 
-
-
-
     /**
      * create parser based on filename
      * @param filename

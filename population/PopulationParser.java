@@ -1,5 +1,6 @@
 package com.CIT594.project594.population;
 
+import com.CIT594.project594.util.ParserUtils;
 import com.CIT594.project594.wrapper.Covid;
 import com.CIT594.project594.Main;
 
@@ -15,6 +16,7 @@ import java.util.TreeMap;
  */
 
 public class PopulationParser extends Main {
+
     /**
      * save info about population per zip
      */
@@ -46,6 +48,7 @@ public class PopulationParser extends Main {
                     // create the instance
                     popParser = new PopulationParser();
                     PopPerZip = new TreeMap<>();
+
                 }
             }
         }
@@ -56,7 +59,7 @@ public class PopulationParser extends Main {
      * getter for this map
      * @return
      */
-    public static TreeMap<Long, Long> getPopPerZip() {
+    public  TreeMap<Long, Long> getPopPerZip() {
         return PopPerZip;
     }
 
@@ -177,5 +180,19 @@ public class PopulationParser extends Main {
             // do nothing just let res = 0
         }
         return res;
+    }
+
+    /**
+     * get population of this zip
+     * return 0l if zip is not valid or didnot exists in PopPerZip
+     * @param zip
+     * @return
+     */
+    public Long getPopPerZip(String zip){
+        Long lZip = ParserUtils.tryCastStrToLong(zip);
+        if(lZip.equals(0l) || !PopPerZip.containsKey(lZip)){
+            return 0l;
+        }
+        return PopPerZip.get(lZip);
     }
 }
